@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -51,7 +49,11 @@ namespace TempleRun
             
             _prevTile = Instantiate(tile.gameObject, _currentTileLocation, newTileRotation);
             _currentTiles.Add(_prevTile);
-            _currentTileLocation += Vector3.Scale(_prevTile.GetComponent<Renderer>().bounds.size, _currentTileDirection);
+
+            if (spawnObstacle) SpawnObstacle();
+            
+            if (tile.type == TileType.STRAIGHT)
+                _currentTileLocation += Vector3.Scale(_prevTile.GetComponent<Renderer>().bounds.size, _currentTileDirection);
         }
         
         public void AddNewDirection(Vector3 newDirection)
@@ -59,6 +61,7 @@ namespace TempleRun
             _currentTileDirection = newDirection;
             DeletePreviousTiles();
 
+            // Calculate the next tile location.
             Vector3 tilePlacementScale;
             if (_prevTile.GetComponent<Tile>().type == TileType.SIDEWAYS)
             {
@@ -81,11 +84,39 @@ namespace TempleRun
             _currentTileLocation += tilePlacementScale;
             
             var currentPathLength = Random.Range(minimumStraightTileCount, maximumStraightTileCount);
+            for (var i = 0; i < currentPathLength; i++)
+            {
+                SpawnTile(startingTile.GetComponent<Tile>(), (i == 0)? false : true);
+            }
+            
+            SpawnTile(SelectRandomGameObjectFromList(turnTiles).GetComponent<Tile>());
         }
 
         private void DeletePreviousTiles()
         {
+            while (_currentTiles.Count != 1)
+            {
+                var tile = _currentTiles[0];
+                _currentTiles.RemoveAt(0);
+                Destroy(tile);
+            }
             
+            while (_currentObstacles.Count != 0)
+            {
+                var obstacle = _currentObstacles[0];
+                _currentObstacles.RemoveAt(0);
+                Destroy(obstacle);
+            }
+        }
+
+        private void SpawnObstacle()
+        {
+            if (Random.value > 0.2f) return;
+            
+            var obstaclePrefab = SelectRandomGameObjectFromList(obstacles);
+            var newObstacleRotation = obstaclePrefab.transform.rotation * Quaternion.LookRotation(_currentTileDirection, Vector3.up);
+            var obstacle = Instantiate(obstaclePrefab, _currentTileLocation, newObstacleRotation);
+            _currentObstacles.Add(obstacle);
         }
 
         /// <summary>
