@@ -7,91 +7,113 @@ namespace TempleRun
     public class TileSpawner : MonoBehaviour
     {
         [SerializeField] private int tileStartCount = 10;
-        [SerializeField] private int minimumStraightTileCount = 3;
-        [SerializeField] private int maximumStraightTileCount = 15;
-        
-        [SerializeField] private GameObject startingTile;
-        [SerializeField] private List<GameObject> turnTiles;
+        [SerializeField] private int minimumStraightTiles = 3;
+        [SerializeField] private int maximumStraightTiles = 15;
+        [SerializeField] private GameObject staringTile;
+        [SerializeField] private List<GameObject> turnTile;
         [SerializeField] private List<GameObject> obstacles;
-        
+
         private Vector3 _currentTileLocation = Vector3.zero;
         private Vector3 _currentTileDirection = Vector3.forward;
         private GameObject _prevTile;
-        
+
         private List<GameObject> _currentTiles;
         private List<GameObject> _currentObstacles;
+
 
         private void Start()
         {
             _currentTiles = new List<GameObject>();
             _currentObstacles = new List<GameObject>();
-            
-            // Make sures that random number is different and unique every time
+
+            // Make sure to generate random values always. 
             Random.InitState(System.DateTime.Now.Millisecond);
 
-            // Spawn starting straight tiles
             for (var i = 0; i < tileStartCount; i++)
-            {   
-                SpawnTile(startingTile.GetComponent<Tile>());
+            {
+                SpawnTile(staringTile.GetComponent<Tile>());
             }
             
-            SpawnTile(SelectRandomGameObjectFromList(turnTiles).GetComponent<Tile>());
+            SpawnTile(SelectRandomGameObjectFromList(turnTile).GetComponent<Tile>());
+            
         }
 
         /// <summary>
-        /// Calculates the next tile location, direction and spawns the tile of the given type.
+        /// Spawn the given tile at the location and direction also calculate location and direction for next tile to spawn.
         /// </summary>
         /// <param name="tile">Type of tile to spawn.</param>
-        /// <param name="spawnObstacle">Should a obstacle be instantiate or not.</param>
+        /// <param name="spawnObstacle">If obstacle will spawn or not.</param>
         private void SpawnTile(Tile tile, bool spawnObstacle = false)
         {
             var newTileRotation = tile.gameObject.transform.rotation * Quaternion.LookRotation(_currentTileDirection, Vector3.up);
             
-            _prevTile = Instantiate(tile.gameObject, _currentTileLocation, newTileRotation);
+            _prevTile = GameObject.Instantiate(tile.gameObject, _currentTileLocation, newTileRotation);
             _currentTiles.Add(_prevTile);
 
-            if (spawnObstacle) SpawnObstacle();
-            
+            if (spawnObstacle)
+            {
+                SpawnObstacle();
+            }
+
             if (tile.type == TileType.STRAIGHT)
+            {
                 _currentTileLocation += Vector3.Scale(_prevTile.GetComponent<Renderer>().bounds.size, _currentTileDirection);
+            }
         }
-        
-        public void AddNewDirection(Vector3 newDirection)
+
+        private void SpawnObstacle()
         {
-            _currentTileDirection = newDirection;
+            if (Random.value > 0.2f) return;
+
+            var obstaclePrefab = SelectRandomGameObjectFromList(obstacles);
+            var newObjectRotation = obstaclePrefab.gameObject.transform.rotation * Quaternion.LookRotation(_currentTileDirection, Vector3.up);
+            
+            var obstacle = Instantiate(obstaclePrefab, _currentTileLocation, newObjectRotation);
+            _currentObstacles.Add(obstacle);
+        }
+
+        /// <summary>
+        /// Select a random tile from the list of tiles.
+        /// </summary>
+        /// <param name="list">The list to select from.</param>
+        /// <returns></returns>
+        private GameObject SelectRandomGameObjectFromList(List<GameObject> list)
+        {
+            if (list.Count == 0) return null;
+            
+            return list[Random.Range(0, list.Count)];
+        }
+
+        public void AddNewDirection(Vector3 direction)
+        {
+            _currentTileDirection = direction;
             DeletePreviousTiles();
 
-            // Calculate the next tile location.
             Vector3 tilePlacementScale;
             if (_prevTile.GetComponent<Tile>().type == TileType.SIDEWAYS)
             {
-                tilePlacementScale = Vector3.Scale(
-                    (_prevTile.GetComponent<Renderer>().bounds.size / 2) +
-                    (Vector3.one * startingTile.GetComponent<BoxCollider>().size.z / 2),
-                    _currentTileDirection
-                );
+                tilePlacementScale = Vector3.Scale((_prevTile.GetComponent<Renderer>().bounds.size / 2) + (Vector3.one * staringTile.GetComponent<BoxCollider>().size.z / 2), _currentTileDirection);
             }
             else
             {
-                // Left or right tiles.
-                tilePlacementScale = Vector3.Scale(
-                    (_prevTile.GetComponent<Renderer>().bounds.size - (Vector3.one * 2)) +
-                    (Vector3.one * startingTile.GetComponent<BoxCollider>().size.z / 2),
-                    _currentTileDirection
-                );
+                // Left or right tiles
+                tilePlacementScale = Vector3.Scale((_prevTile.GetComponent<Renderer>().bounds.size - (2 * Vector3.one)) + (Vector3.one * staringTile.GetComponent<BoxCollider>().size.z / 2), _currentTileDirection);
             }
             
             _currentTileLocation += tilePlacementScale;
-            
-            var currentPathLength = Random.Range(minimumStraightTileCount, maximumStraightTileCount);
+
+            var currentPathLength = Random.Range(minimumStraightTiles, maximumStraightTiles);
             for (var i = 0; i < currentPathLength; i++)
             {
-                SpawnTile(startingTile.GetComponent<Tile>(), (i == 0)? false : true);
+                SpawnTile(staringTile.GetComponent<Tile>(), (i == 0)? false: true);
             }
             
-            SpawnTile(SelectRandomGameObjectFromList(turnTiles).GetComponent<Tile>());
+            SpawnTile(SelectRandomGameObjectFromList(turnTile).GetComponent<Tile>());
         }
 
+        /// <summary>
+        /// Deletes previous tiles from list after turning. 
+        /// </summary>
         private void DeletePreviousTiles()
         {
             while (_currentTiles.Count != 1)
@@ -107,26 +129,6 @@ namespace TempleRun
                 _currentObstacles.RemoveAt(0);
                 Destroy(obstacle);
             }
-        }
-
-        private void SpawnObstacle()
-        {
-            if (Random.value > 0.2f) return;
-            
-            var obstaclePrefab = SelectRandomGameObjectFromList(obstacles);
-            var newObstacleRotation = obstaclePrefab.transform.rotation * Quaternion.LookRotation(_currentTileDirection, Vector3.up);
-            var obstacle = Instantiate(obstaclePrefab, _currentTileLocation, newObstacleRotation);
-            _currentObstacles.Add(obstacle);
-        }
-
-        /// <summary>
-        /// Randomly selects a game object from a list.
-        /// </summary>
-        /// <param name="list">List of the game objects.</param>
-        /// <returns>Selected game object.</returns>
-        private GameObject SelectRandomGameObjectFromList(List<GameObject> list)
-        {
-            return list.Count == 0 ? null : list[Random.Range(0, list.Count)];
         }
     }
 
