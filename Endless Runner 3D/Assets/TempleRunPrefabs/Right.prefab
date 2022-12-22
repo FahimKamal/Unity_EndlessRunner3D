@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MeshFormatVersion: 1
+  m_MeshFormatVersion: 2
   m_Faces:
   - m_Indexes: 000000000100000002000000010000000300000002000000
     m_SmoothingGroup: 0
@@ -397,7 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MeshFormatVersion: 1
+  m_MeshFormatVersion: 2
   m_Faces:
   - m_Indexes: 000000000100000002000000010000000300000002000000
     m_SmoothingGroup: 0
@@ -425,7 +425,7 @@ MonoBehaviour:
       m_SwapUV: 0
       m_Fill: 1
       m_Scale: {x: 1, y: 1}
-      m_Offset: {x: 0, y: 0}
+      m_Offset: {x: 0.00000047683716, y: 0}
       m_Rotation: 0
       m_Anchor: 9
     m_Material: {fileID: 0}
@@ -476,7 +476,7 @@ MonoBehaviour:
       m_SwapUV: 0
       m_Fill: 1
       m_Scale: {x: 1, y: 1}
-      m_Offset: {x: 0, y: 0}
+      m_Offset: {x: 0, y: -0.00000047683716}
       m_Rotation: 0
       m_Anchor: 9
     m_Material: {fileID: 0}
@@ -493,7 +493,7 @@ MonoBehaviour:
       m_SwapUV: 0
       m_Fill: 1
       m_Scale: {x: 1, y: 1}
-      m_Offset: {x: 0, y: 0}
+      m_Offset: {x: 0, y: -0.00000047683716}
       m_Rotation: 0
       m_Anchor: 9
     m_Material: {fileID: 0}
@@ -541,9 +541,9 @@ MonoBehaviour:
   - {x: -2.0211349, y: -0.074484825}
   - {x: 2.0230794, y: 0.074484825}
   - {x: -2.0211349, y: 0.074484825}
-  - {x: 2.0061104, y: -0.074484825}
+  - {x: 2.00611, y: -0.074484825}
   - {x: -12.046705, y: -0.074484825}
-  - {x: 2.0061104, y: 0.074484825}
+  - {x: 2.00611, y: 0.074484825}
   - {x: -12.046705, y: 0.074484825}
   - {x: 2.0211432, y: -0.074484825}
   - {x: -2.0230753, y: -0.074484825}
@@ -553,14 +553,14 @@ MonoBehaviour:
   - {x: -2.006108, y: -0.074484825}
   - {x: 12.046702, y: 0.074484825}
   - {x: -2.006108, y: 0.074484825}
-  - {x: -2.0230808, y: 2.006108}
-  - {x: 2.0211334, y: 2.006111}
-  - {x: -2.023081, y: -12.046702}
-  - {x: 2.0211375, y: -12.046704}
-  - {x: 2.023081, y: -12.046702}
-  - {x: -2.0211375, y: -12.046704}
-  - {x: 2.0230808, y: 2.006108}
-  - {x: -2.0211334, y: 2.006111}
+  - {x: -2.0230808, y: 2.0061085}
+  - {x: 2.0211334, y: 2.0061114}
+  - {x: -2.023081, y: -12.046701}
+  - {x: 2.0211375, y: -12.046703}
+  - {x: 2.023081, y: -12.046701}
+  - {x: -2.0211375, y: -12.046703}
+  - {x: 2.0230808, y: 2.0061085}
+  - {x: -2.0211334, y: 2.0061114}
   m_Textures2: []
   m_Textures3: []
   m_Tangents:
@@ -580,14 +580,14 @@ MonoBehaviour:
   - {x: -0.0000000169659, y: 0, z: -1, w: -1}
   - {x: -0.0000000169659, y: 0, z: -1, w: -1}
   - {x: -0.0000000169659, y: 0, z: -1, w: -1}
-  - {x: 1, y: 0, z: 0, w: -1}
-  - {x: 1, y: 0, z: 0, w: -1}
-  - {x: 1, y: 0, z: 0, w: -1}
-  - {x: 1, y: 0, z: 0, w: -1}
-  - {x: -1, y: 0, z: 0, w: -1}
-  - {x: -1, y: 0, z: 0, w: -1}
-  - {x: -1, y: 0, z: 0, w: -1}
-  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: 1, y: 0, z: -4.800916e-14, w: -1}
+  - {x: 1, y: 0, z: -8.001546e-15, w: -1}
+  - {x: 1, y: 0, z: -8.001546e-15, w: -1}
+  - {x: 1, y: 0, z: 3.2006065e-14, w: -1}
+  - {x: -1, y: 0, z: -3.2006075e-14, w: -1}
+  - {x: -1, y: 0, z: 8.001539e-15, w: -1}
+  - {x: -1, y: 0, z: 8.001539e-15, w: -1}
+  - {x: -1, y: 0, z: 4.800915e-14, w: -1}
   m_Colors: []
   m_UnwrapParameters:
     m_HardAngle: 88
@@ -689,7 +689,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1296304372647355893}
   - component: {fileID: 5689222032778958205}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Turn Threshold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
