@@ -50,8 +50,7 @@ namespace TempleRun.Player
         private void Awake()
         {
             _playerInput = GetComponent<PlayerInput>();
-            _controller = GetComponent<CharacterController>();
-            
+            _controller = GetComponent<CharacterController>();            
             
             _turnAction = _playerInput.actions["Turn"];
             _jumpAction = _playerInput.actions["Jump"];
